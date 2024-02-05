@@ -13,12 +13,14 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
   
     <http:listener-config name="apiHttpListenerConfig">
-        <http:listener-connection host="0.0.0.0" port="8081" protocol="HTTPS" tlsContext="apiTLSContext"/>
+        <http:listener-connection host="0.0.0.0" port="${https.port}" protocol="HTTPS" tlsContext="apiTLSContext"/>
     </http:listener-config>
-    <apikit:config name="apiConfig" api="resource::7b773883-63ca-40bc-8814-14713ce575bf:new-check-in-papi-catalog:1.0.0:oas:zip:api.json" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <apikit:config name="apiConfig" api="${api.spec}" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <tls:context name="apiTLSContext" doc:name="TLS Context" doc:id="a4f76e9b-58a3-4b9d-9fe3-5f5d1f1c33ad" >
-      <tls:key-store path="check-in-papi.p12" alias="server" keyPassword="mule12345" password="mule12345" type="pkcs12"/>
+      <tls:key-store path="${tls.keystore.path}" alias="${tls.keystore.alias}" keyPassword="${tls.keystore.keyPassword}" password="${tls.keystore.password}" type="${tls.keystore.type}"/>
     </tls:context>
-    <api-gateway:autodiscovery apiId="19272200" ignoreBasePath="false" doc:name="API Autodiscovery" doc:id="1c19ac03-c2dd-4556-9633-d4834cd72a10" flowRef="api-main" />
+    <api-gateway:autodiscovery apiId="${api.id}" ignoreBasePath="false" doc:name="API Autodiscovery" doc:id="1c19ac03-c2dd-4556-9633-d4834cd72a10" flowRef="api-main" />
+  <configuration-properties doc:name="Configuration properties" doc:id="7efdded0-52c6-441e-a279-f5c77fda4324" file="properties.yaml" />
+
 
 </mule>
