@@ -1,0 +1,7 @@
+api:
+  id:           "19272200"
+
+tls.keystore:
+  type:        "pkcs12"
+  path:        "cert/altdev-check-in-papi.p12"
+  alias:       "server"
