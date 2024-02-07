@@ -11,24 +11,25 @@
     <!-- ### attributi locali del pom ###-->
     <groupId>7b773883-63ca-40bc-8814-14713ce575bf</groupId>
     <artifactId>new-check-in-papi-app</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <packaging>mule-application</packaging>
     <name>new-check-in-papi</name>
- 
     <properties>
         <!-- ### aggiungiamo le properties da usare con il resource filtering ### -->
         <api.groupId>7b773883-63ca-40bc-8814-14713ce575bf</api.groupId>
         <api.artifactId>new-check-in-papi-catalog</api.artifactId>
         <api.version>1.0.0</api.version>
         <api.layer>${api.layer.papi}</api.layer>
-        <munit.version>2.3.14</munit.version> 
-    </properties>  
-
+        <munit.version>2.3.14</munit.version>
+    </properties>
     <build>
         <plugins>
             <plugin>
                 <groupId>org.mule.tools.maven</groupId>
                 <artifactId>mule-maven-plugin</artifactId>
+                <configuration>
+                    <classifier>---- select project type ----</classifier>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>com.mulesoft.munit.tools</groupId>
