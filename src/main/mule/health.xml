@@ -4,28 +4,11 @@
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
-  <flow name="api-alive" doc:id="672e8690-7de7-476e-a7af-3554d77fcd18" >
-    <http:listener config-ref="apiHttpListenerConfig" path="/alive" doc:name="HTTPListener">
-      <http:response statusCode="200"/>
-      <http:error-response statusCode="500">
-        <http:body>DOWN</http:body>
-      </http:error-response>
-    </http:listener>
-    <logger level="INFO" doc:name="Logger" doc:id="481be84e-f919-425d-af33-cae1856dadad" />
-    <set-payload value="UP"/>
-  </flow>
-  <flow name="api-ready" doc:id="d147a2ec-61c8-499f-99dd-a18c7797d1b7" >
-    <http:listener doc:name="HTTPListener" doc:id="913cb095-4ff2-4dcc-b534-84fb9ef1c1a6" config-ref="apiHttpListenerConfig" path="/ready">
-      <http:response statusCode="200" />
-      <http:error-response statusCode="500" >
-        <http:body>DOWN</http:body>
-      </http:error-response>
-    </http:listener>
-    <flow-ref name="check-all-dependencies-are-alive"/>
-    <set-payload value="UP"/>
-  </flow>
+
+  <import file="health-common.xml" />
   
   <sub-flow name="check-all-dependencies-are-alive">
     <logger/>
-   </sub-flow>
+  </sub-flow>
+
 </mule>

@@ -21,15 +21,12 @@
         <api.version>1.0.0</api.version>
         <api.layer>${api.layer.papi}</api.layer>
         <munit.version>2.3.14</munit.version>
-    </properties>
+    </properties> 
     <build>
         <plugins>
             <plugin>
                 <groupId>org.mule.tools.maven</groupId>
                 <artifactId>mule-maven-plugin</artifactId>
-                <configuration>
-                    <classifier>---- select project type ----</classifier>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>com.mulesoft.munit.tools</groupId>
@@ -66,11 +63,11 @@
             <artifactId>mule-tracing-module</artifactId>
             <classifier>mule-plugin</classifier>
         </dependency>
-        <!--<dependency>
+        <dependency>
             <groupId>${student.deployment.ap.orgid}</groupId>
             <artifactId>apps-commons</artifactId>
             <classifier>mule-plugin</classifier>
-        </dependency>-->
+        </dependency>
         <dependency>
             <groupId>com.mulesoft.munit</groupId>
             <artifactId>munit-runner</artifactId>
