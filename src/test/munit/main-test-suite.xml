@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="   http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd   http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd   http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<!-- ### nome della suite di test ### -->
+  <munit:config name="main-test-suite.xml"/>
+ 
+  <!-- ### primo flow di test ### -->
+
+  <!-- ### secondo flow di test ### -->
+  <munit:test description="Test" doc:id="a56f6a5a-b628-4a81-bc58-1b2ef1a03f48" name="check-in-by-pnr-happy-path-test">
+    <munit:execution>
+      <!-- ### check-in-by-pnr: flusso sotto test ### -->
+      <munit:set-event doc:name="Set Event" doc:id="b4b82934-2725-4afb-a3cb-d597671cb754" >
+        <munit:payload value="#[output application/json --- read(MunitTools::getResourceAsString('json/check-in-by-pnr-request.json'), 'application/json')]" />
+        <munit:variables >
+          <munit:variable key="PNR" value="N123" />
+        </munit:variables>
+      </munit:set-event>
+      <flow-ref doc:id="09e1fb35-d49b-443d-bc9d-80596f6fb2a3" doc:name="check-in-by-pnr" name="check-in-by-pnr" />
+    
+</munit:execution>
+    <munit:validation >
+      <munit-tools:assert-that doc:name="Assert that" doc:id="5dbce656-7749-4e24-b6c6-d675986eb5aa" is="#[MunitTools::equalTo({paymentID: 'PAY-1AKD7482FAB9STATKO'})]" expression="#[payload]"/>
+    </munit:validation>
+  
+</munit:test>
+  <munit:test description="Test" doc:id="f6c3e559-6b2a-4ea1-8335-44febcc8a98f" name="payment-approval-by-pnr-happy-path-test">
+    <munit:execution>
+      <!-- ### payment-approval-by-pnr: flusso sotto test ### -->
+      <flow-ref doc:id="0b845518-f58d-4ddf-8f9e-cd22ae618eda" doc:name="payment-approval-by-pnr" name="payment-approval-by-pnr" />
+    </munit:execution>
+  </munit:test>
+  <!-- [STUDIO:"start-up-test"]  <munit:test name="start-up-test" description="..." >
+    <munit:execution>
+      <logger/>
+    </munit:execution>
+  </munit:test> [STUDIO] -->
+
+</mule>
