@@ -32,7 +32,12 @@ output application/json
   </flow>
   <!-- ### migrato da api.xml ### -->
   <flow name="check-in-by-pnr" doc:id="c76ef46e-b87f-427e-b957-369bf0d0232f" >
+    <set-variable value="#[payload]" doc:name="checkIn" doc:id="63a9f1b1-b67c-42ea-bc55-063ec02e6ed3" variableName="checkIn"/>
+    <logger level="INFO" doc:name="Logger" doc:id="28dec33f-3267-481b-b482-c984c57bfc89" />
     <tracing:set-logging-variable doc:name="PNR" doc:id="b18fbd2c-2f53-4394-bb31-1e4fa074fc3a" variableName="PNR" value="#[vars.PNR default '']"/>
+    <flow-ref name="check-in-flights-management" doc:name="check-in-flights-management"/>
+    <flow-ref name="register-passenger-data" doc:name="register-passenger-data"/>
+    <flow-ref name="create-payment-for-bags" doc:name="create-payment-for-bags"/>
     <ee:transform doc:name="Transform Message">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
@@ -42,6 +47,20 @@ output application/json
   paymentID: "PAY-1AKD7482FAB9STATKO"
 }]]></ee:set-payload>
             </ee:message>
-        </ee:transform>
+        </ee:transform>      
+    
   </flow>
+
+  <flow name="check-in-flights-management">
+    <logger/>
+  </flow>
+  
+  <flow name="register-passenger-data">
+    <logger/>
+  </flow>
+  
+  <flow name="create-payment-for-bags">
+    <logger/>
+  </flow>  
+
 </mule>

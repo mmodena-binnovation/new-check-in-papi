@@ -6,6 +6,40 @@
 
   <!-- ### secondo flow di test ### -->
   <munit:test description="Test" doc:id="a56f6a5a-b628-4a81-bc58-1b2ef1a03f48" name="check-in-by-pnr-happy-path-test">
+    <munit:behavior >
+      <munit-tools:mock-when doc:name="check-in-flights-management" doc:id="2a839b98-7a06-4084-ba13-7b5b91666139" processor="flow-ref">
+        <munit-tools:with-attributes >
+          <munit-tools:with-attribute whereValue="check-in-flights-management" attributeName="name" />
+        </munit-tools:with-attributes>
+        <munit-tools:then-return >
+          <munit-tools:payload value="#[output application/json --- {}]" />
+        </munit-tools:then-return>
+      </munit-tools:mock-when>
+      <munit-tools:mock-when doc:name="register-passenger-data" doc:id="4840c2f6-0f39-4c7b-89fb-edbf79442757" processor="flow-ref">
+        <munit-tools:with-attributes >
+          <munit-tools:with-attribute whereValue="register-passenger-data" attributeName="name" />
+        </munit-tools:with-attributes>
+        <munit-tools:then-return >
+          <munit-tools:payload value="#[output application/json --- {}]" />
+        </munit-tools:then-return>
+      </munit-tools:mock-when>
+      <munit-tools:mock-when doc:name="create-payment-for-bags" doc:id="766b359b-f639-4a8c-959e-e67071c1558c" processor="flow-ref">
+        <munit-tools:with-attributes >
+          <munit-tools:with-attribute whereValue="create-payment-for-bags" attributeName="name" />
+        </munit-tools:with-attributes>
+        <munit-tools:then-return >
+          <munit-tools:payload value="#[output application/json --- {}]" />
+        </munit-tools:then-return>
+      </munit-tools:mock-when>
+      <munit-tools:spy doc:name="create-payment-for-bags" doc:id="3461ff62-2240-450c-97eb-36553afce6fb" processor="flow-ref">
+        <munit-tools:with-attributes >
+          <munit-tools:with-attribute whereValue="create-payment-for-bags" attributeName="name" />
+        </munit-tools:with-attributes>
+        <munit-tools:before-call >
+          <munit-tools:assert-that doc:name="checkIn" doc:id="98f736c3-ade6-4d96-bef0-273f68301e2c" is="#[MunitTools::equalTo(read(MunitTools::getResourceAsString('json/check-in-by-pnr-request.json'), 'application/json'))]" expression="#[vars.checkIn]"/>
+        </munit-tools:before-call>
+      </munit-tools:spy>
+    </munit:behavior>
     <munit:execution>
       <!-- ### check-in-by-pnr: flusso sotto test ### -->
       <munit:set-event doc:name="Set Event" doc:id="b4b82934-2725-4afb-a3cb-d597671cb754" >
@@ -18,6 +52,21 @@
     
 </munit:execution>
     <munit:validation >
+      <munit-tools:verify-call doc:name="check-in-flights-management" doc:id="56173c31-3c19-45b2-88c4-6b8fddc5cb44" processor="flow-ref" times="1">
+        <munit-tools:with-attributes >
+          <munit-tools:with-attribute whereValue="check-in-flights-management" attributeName="name" />
+        </munit-tools:with-attributes>
+      </munit-tools:verify-call>
+      <munit-tools:verify-call doc:name="register-passenger-data" doc:id="dbfd1749-63f8-4cdd-99cc-9ab8063a5ddd" processor="flow-ref" times="1">
+        <munit-tools:with-attributes >
+          <munit-tools:with-attribute whereValue="register-passenger-data" attributeName="name" />
+        </munit-tools:with-attributes>
+      </munit-tools:verify-call>
+      <munit-tools:verify-call doc:name="create-payment-for-bags" doc:id="7dd6fa4c-6841-49e0-9a05-f05a0c0c0549" processor="flow-ref" times="1">
+        <munit-tools:with-attributes >
+          <munit-tools:with-attribute whereValue="create-payment-for-bags" attributeName="name" />
+        </munit-tools:with-attributes>
+      </munit-tools:verify-call>
       <munit-tools:assert-that doc:name="Assert that" doc:id="5dbce656-7749-4e24-b6c6-d675986eb5aa" is="#[MunitTools::equalTo({paymentID: 'PAY-1AKD7482FAB9STATKO'})]" expression="#[payload]"/>
     </munit:validation>
   
