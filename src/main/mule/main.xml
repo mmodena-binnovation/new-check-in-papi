@@ -5,12 +5,48 @@
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/tracing http://www.mulesoft.org/schema/mule/tracing/current/mule-tracing.xsd">
-  <!-- ### migrato da api.xml ### -->
-  <flow name="payment-approval-by-pnr" doc:id="50372e1f-4c5a-46a6-9ece-a48f99372208" >
-    <tracing:set-logging-variable doc:name="PNR" doc:id="5a0e9952-3f54-4003-979a-635afba5ff3e" variableName="PNR" value="#[vars.PNR default '']"/>
+  
+  <flow name="check-in-by-pnr" doc:id="c76ef46e-b87f-427e-b957-369bf0d0232f">
+    <set-variable value="#[payload]" doc:name="checkIn" doc:id="63a9f1b1-b67c-42ea-bc55-063ec02e6ed3" variableName="checkIn" />
+    <logger level="INFO" doc:name="Logger" doc:id="28dec33f-3267-481b-b482-c984c57bfc89" />
+    <tracing:set-logging-variable doc:name="PNR" doc:id="b18fbd2c-2f53-4394-bb31-1e4fa074fc3a" variableName="PNR" value="#[vars.PNR default '']" />
+    <flow-ref name="check-in-flights-management" doc:name="check-in-flights-management" />
+    <flow-ref name="register-passenger-data" doc:name="register-passenger-data" />
+    <flow-ref name="create-payment-for-bags" doc:name="create-payment-for-bags" />
     <ee:transform doc:name="Transform Message">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  paymentID: "PAY-1AKD7482FAB9STATKO"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>      
+    
+  </flow>
+  <flow name="payment-approval-by-pnr" doc:id="50372e1f-4c5a-46a6-9ece-a48f99372208" >
+    <tracing:set-logging-variable doc:name="PNR" doc:id="5a0e9952-3f54-4003-979a-635afba5ff3e" variableName="PNR" value="#[vars.PNR default '']"/>
+    <flow-ref name="update-approvals" doc:name="update-approvals" doc:id="b9903304-b3b4-4f67-a556-96305f14a4e7"/>
+    <flow-ref name="get-boarding-pass" doc:name="get-boarding-pass"/>
+  </flow>
+  <flow name="update-approvals">
+    <ee:transform>
+      <ee:message>
+        <ee:set-payload><![CDATA[ %dw 2.0
+output application/json
+---
+{
+	status:"Payment Executed"
+} ]]></ee:set-payload>
+      </ee:message>
+    </ee:transform>
+  </flow>
+  
+  <flow name="get-boarding-pass">
+    <ee:transform>
+      <ee:message>
+        <ee:set-payload ><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -27,28 +63,8 @@ output application/json
   bagsCount: 2,
   PNR: "928382J"
 }]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
-  </flow>
-  <!-- ### migrato da api.xml ### -->
-  <flow name="check-in-by-pnr" doc:id="c76ef46e-b87f-427e-b957-369bf0d0232f" >
-    <set-variable value="#[payload]" doc:name="checkIn" doc:id="63a9f1b1-b67c-42ea-bc55-063ec02e6ed3" variableName="checkIn"/>
-    <logger level="INFO" doc:name="Logger" doc:id="28dec33f-3267-481b-b482-c984c57bfc89" />
-    <tracing:set-logging-variable doc:name="PNR" doc:id="b18fbd2c-2f53-4394-bb31-1e4fa074fc3a" variableName="PNR" value="#[vars.PNR default '']"/>
-    <flow-ref name="check-in-flights-management" doc:name="check-in-flights-management"/>
-    <flow-ref name="register-passenger-data" doc:name="register-passenger-data"/>
-    <flow-ref name="create-payment-for-bags" doc:name="create-payment-for-bags"/>
-    <ee:transform doc:name="Transform Message">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  paymentID: "PAY-1AKD7482FAB9STATKO"
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>      
-    
+      </ee:message>
+    </ee:transform>
   </flow>
 
   <flow name="check-in-flights-management">

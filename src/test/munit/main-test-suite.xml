@@ -16,14 +16,14 @@
     </munit:execution>
     <munit:validation>
       <flow-ref name="verify-all-mocks-are-called-once" doc:name="verify-all-mocks-are-called-once"/>
-      <munit-tools:assert-that doc:name="Assert that" doc:id="b670b673-42ff-4798-b848-980375c19e76" is="#[MunitTools::equalTo(TestData::checkInByPNRResp)]" expression="#[payload]"/>   
+      <munit-tools:assert-that doc:name="assert-payload" doc:id="b670b673-42ff-4798-b848-980375c19e76" is="#[MunitTools::equalTo(TestData::checkInByPNRResp)]" expression="#[payload]"/>   
     </munit:validation> 
   </munit:test>
 
   <munit:test name="check-in-by-pnr-exception-path-test" expectedErrorType="APP:CANT_CREATE_PAYMENT">
     <munit:behavior>
       <flow-ref name="setup-happy-sapi-mocks" doc:name="setup-happy-sapi-mocks"/>
-      <munit-tools:mock-when processor="flow-ref">
+      <munit-tools:mock-when processor="flow-ref" doc:name="create-payment-for-bags">
         <munit-tools:with-attributes>
           <munit-tools:with-attribute attributeName="name" whereValue="create-payment-for-bags"/>
         </munit-tools:with-attributes>
@@ -37,13 +37,6 @@
       <flow-ref name="check-in-by-pnr" doc:name="check-in-by-pnr"/>
     </munit:execution >
   </munit:test >
-
-  <munit:test description="Test" doc:id="58e549a9-02fc-4e77-a3f6-86b3b7da5edd" name="payment-approval-by-pnr-happy-path-test">
-    <munit:execution>
-      <!-- ### payment-approval-by-pnr: flusso sotto test ### -->
-      <flow-ref doc:id="1f8a16ed-7d02-42ca-b89a-a5adca641179" doc:name="payment-approval-by-pnr" name="payment-approval-by-pnr" />
-    </munit:execution>
-  </munit:test>
   
   <sub-flow name="setup-happy-sapi-mocks">
       <munit-tools:mock-when doc:name="check-in-flights-management" doc:id="39619c66-3586-42f7-9187-bac643cbde51" processor="flow-ref">
@@ -84,7 +77,7 @@
   </sub-flow>
   
   <sub-flow name="set-check-in-event">
-      <munit:set-event doc:name="Set Event" doc:id="392a356e-77b8-41a4-b804-c0c94d749da7" >
+      <munit:set-event doc:name="Set Input" doc:id="392a356e-77b8-41a4-b804-c0c94d749da7" >
         <munit:payload value="#[output application/json --- TestData::checkIn]" />
       <munit:variables >
         <munit:variable key="PNR" value="#[TestData::pnr]" />
@@ -117,5 +110,27 @@
       <logger/>
     </munit:execution>
   </munit:test> [STUDIO] -->
+  <munit:test name="payment-approval-by-pnr-happy-path-test" doc:id="ac18001a-f7e5-429e-8120-7f9350a9b19b" >
+    <munit:behavior >
+      <munit-tools:mock-when doc:name="update-approvals" doc:id="a9c16613-aa91-42f5-9c82-e81b66cff9d6" processor="flow-ref">
+        <munit-tools:with-attributes >
+          <munit-tools:with-attribute whereValue="update-approvals" attributeName="name" />
+        </munit-tools:with-attributes>
+        <munit-tools:then-return >
+          <munit-tools:payload value="#[output application/json  --- TestData::mockPayload]" />
+        </munit-tools:then-return>
+      
+</munit-tools:mock-when>
+      <munit:set-event doc:name="set-input" doc:id="e3be9223-ca52-446c-b4c8-5a2b400c35b0" >
+        <munit:payload value="#[output application/json  --- TestData::paymentApprovalReq]" />
+      </munit:set-event>
+    </munit:behavior>
+    <munit:execution >
+      <flow-ref doc:name="payment-approval-by-pnr" doc:id="f5adc101-4580-45a2-9e74-0c5164b7525f" name="payment-approval-by-pnr"/>
+    </munit:execution>
+    <munit:validation >
+      <munit-tools:assert-that doc:name="assert-payload" doc:id="c7519393-7ee0-47c0-8891-384eee6414c3" is="#[MunitTools::equalTo(TestData::paymentApprovalByPNRResp)]" expression="#[payload]"/>
+    </munit:validation>
+  </munit:test>
 
 </mule>
