@@ -61,6 +61,11 @@ output application/json
   
   <flow name="create-payment-for-bags">
     <logger/>
+    <error-handler>
+      <on-error-continue>
+        <raise-error type="APP:CANT_CREATE_PAYMENT"/>
+      </on-error-continue>
+    </error-handler>
   </flow>  
 
 </mule>
