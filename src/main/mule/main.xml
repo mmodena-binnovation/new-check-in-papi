@@ -83,5 +83,4 @@ output application/json
       </on-error-continue>
     </error-handler>
   </flow>  
-
 </mule>

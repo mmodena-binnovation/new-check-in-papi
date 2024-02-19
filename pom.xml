@@ -5,7 +5,7 @@
     <parent>
         <groupId>7b773883-63ca-40bc-8814-14713ce575bf</groupId>
         <artifactId>solutions-parent-pom</artifactId>
-        <version>1.0.0</version> 
+        <version>1.0.1</version> 
         <relativePath>../parent-pom/pom.xml</relativePath>
     </parent>
     <!-- ### attributi locali del pom ###-->
@@ -89,7 +89,6 @@
         <dependency>
             <groupId>org.mule.modules</groupId>
             <artifactId>mule-validation-module</artifactId>
-            <version>2.0.3</version>
             <classifier>mule-plugin</classifier>
         </dependency>
     </dependencies>
@@ -101,5 +100,5 @@
             <url>https://maven.anypoint.mulesoft.com/api/v3/maven</url>
             <layout>default</layout>
         </repository>
-    </repositories>
+    </repositories> 
 </project>

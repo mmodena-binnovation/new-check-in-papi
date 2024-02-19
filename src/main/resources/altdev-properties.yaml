@@ -5,3 +5,11 @@ tls.keystore:
   type:        "pkcs12"
   path:        "cert/altdev-check-in-papi.p12"
   alias:       "server"
+
+external:
+  flightsManagementSapi:
+    host:     "tngaa-flights-management-sapi-dev-9yj2rh.rajrd4-2.usa-e1.cloudhub.io"
+  passengerDataSapi:
+    host:     "tngaa-passenger-data-sapi-dev-9yj2rh.rajrd4-2.usa-e1.cloudhub.io"
+  paypalSapi:
+    host:     "tngaa-paypal-sapi-dev-9yj2rh.rajrd4-2.usa-e1.cloudhub.io"

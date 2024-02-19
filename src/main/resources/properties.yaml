@@ -7,3 +7,11 @@ api :
   
 https :
   port : "8081"
+
+external:
+  flightsManagementSapi:
+    aliveUrl: "https://${external.flightsManagementSapi.host}/alive"
+  passengerDataSapi:
+    aliveUrl: "https://${external.passengerDataSapi.host}/alive"
+  paypalSapi:
+    aliveUrl: "https://${external.paypalSapi.host}/alive"

@@ -8,21 +8,12 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
   <import file="health-common.xml" />
   
   <sub-flow name="check-all-dependencies-are-alive">
-    <http:request method="GET" url="https://tngaa-flights-management-sapi-dev-9yj2rh.rajrd4-2.usa-e1.cloudhub.io/alive" followRedirects="true" doc:name="flights-management-sapi-dev">
-      <http:response-validator >
-        <http:success-status-code-validator values="200" />
-      </http:response-validator>
-    </http:request>
-    <http:request method="GET" url="https://tngaa-passenger-data-sapi-dev-9yj2rh.rajrd4-2.usa-e1.cloudhub.io/alive" followRedirects="true" doc:name="passenger-data-sapi-dev">
-      <http:response-validator >
-        <http:success-status-code-validator values="200" />
-      </http:response-validator>
-    </http:request>
-    <http:request method="GET" url="https://tngaa-paypal-sapi-dev-9yj2rh.rajrd4-2.usa-e1.cloudhub.io/alive" followRedirects="true" doc:name="paypal-sapi-dev">
-      <http:response-validator >
-        <http:success-status-code-validator values="200" />
-      </http:response-validator>
-    </http:request>
+    <set-variable variableName="livenessEndpoint" value="${external.flightsManagementSapi.aliveUrl}" doc:name="livenessEndpoint of flights-management-sapi"/>
+    <flow-ref name="check-dependency-is-alive" doc:name="check-dependency-is-alive"/>
+    <set-variable variableName="livenessEndpoint" value="${external.passengerDataSapi.aliveUrl}" doc:name="livenessEndpoint of passenger-data-sapi"/>
+    <flow-ref name="check-dependency-is-alive" doc:name="check-dependency-is-alive"/>
+    <set-variable variableName="livenessEndpoint" value="${external.paypalSapi.aliveUrl}" doc:name="livenessEndpoint of paypal-sapi"/>
+    <flow-ref name="check-dependency-is-alive" doc:name="check-dependency-is-alive"/>
   </sub-flow>
 
 </mule>
