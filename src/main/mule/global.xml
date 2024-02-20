@@ -14,19 +14,50 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
 http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd">
     
     <global-property doc:name="Global Property" doc:id="988a6d18-eacb-45bb-b09d-fdc48527d0d9" name="env" value="altdev" />
+    
     <configuration-properties doc:name="Configuration properties" doc:id="b40e414a-b451-4ff4-b65e-d6cc8f477a80" file="${env}-properties.yaml" />
+    
     <configuration-properties doc:name="Configuration properties" doc:id="179b6572-3ad4-4fbe-9411-56c4347af80f" file="properties.yaml" />
+    
     <http:listener-config name="apiHttpListenerConfig">
         <http:listener-connection host="0.0.0.0" port="${https.port}" protocol="HTTPS" tlsContext="apiTLSContext"/>
     </http:listener-config>
+    
     <apikit:config name="apiConfig" api="${api.spec}" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    
     <tls:context name="apiTLSContext" doc:name="TLS Context" doc:id="a4f76e9b-58a3-4b9d-9fe3-5f5d1f1c33ad" >
       <tls:key-store path="${tls.keystore.path}" alias="${tls.keystore.alias}" keyPassword="${secure::tls.keystore.keyPassword}" password="${secure::tls.keystore.password}" type="${tls.keystore.type}"/>
     </tls:context>
+    
     <api-gateway:autodiscovery apiId="${api.id}" ignoreBasePath="false" doc:name="API Autodiscovery" doc:id="1c19ac03-c2dd-4556-9633-d4834cd72a10" flowRef="api-main" />
-  <secure-properties:config name="secureEnvPropsConfig" doc:name="Secure Properties Config" doc:id="e2f6cfeb-d218-457c-b015-06b504adbb69" file='${env}-secure-properties.yaml' key="${encrypt.key}" >
-    <secure-properties:encrypt algorithm="Blowfish" />
-  </secure-properties:config>
+    
+    <secure-properties:config name="secureEnvPropsConfig" doc:name="Secure Properties Config" doc:id="e2f6cfeb-d218-457c-b015-06b504adbb69" file='${env}-secure-properties.yaml' key="${encrypt.key}" >
+      <secure-properties:encrypt algorithm="Blowfish" />
+    </secure-properties:config>
+    
+    <http:request-config name="flightsManagementSapiConfig" doc:name="HTTP Request configuration" doc:id="d3152389-eabe-4be9-bac3-cec2755e25be" basePath="/api/${api.majorVersion}">
+      <http:request-connection host="${external.flightsManagementSapi.host}" protocol="HTTPS">
+        <http:authentication >
+          <http:basic-authentication username="e66105d66e8b4520b091127620221cce" password="A1c099D51C50420b84641D71b229EBac" />
+        </http:authentication>
+      </http:request-connection>
+    </http:request-config>
+    
+    <http:request-config name="passengerDataSapiConfig" doc:name="HTTP Request configuration" doc:id="b6bcf6dc-7d2c-4689-acdb-adcea143a6d6" basePath="/api/${api.majorVersion}">
+      <http:request-connection protocol="HTTPS" host="${external.passengerDataSapi.host}" port="${host.port}" >
+        <http:authentication >
+          <http:basic-authentication username="e66105d66e8b4520b091127620221cce" password="A1c099D51C50420b84641D71b229EBac" />
+        </http:authentication>
+      </http:request-connection>
+    </http:request-config>
+    
+    <http:request-config name="paypalSapiConfig" doc:name="HTTP Request configuration" doc:id="95938338-a2ce-44ae-a055-0a6b514eb439" basePath="/api/${api.majorVersion}">
+      <http:request-connection protocol="HTTPS" host="${external.paypalSapi.host}" port="${host.port}" >
+        <http:authentication >
+          <http:basic-authentication username="e66105d66e8b4520b091127620221cce" password="A1c099D51C50420b84641D71b229EBac" />
+        </http:authentication>
+      </http:request-connection>
+    </http:request-config>
   
   
 
